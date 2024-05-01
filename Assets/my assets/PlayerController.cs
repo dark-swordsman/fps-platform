@@ -9,10 +9,10 @@ public class PlayerController : MonoBehaviour
 {
     public Rigidbody rb;
     public GameObject camHolder;
-    public float speed, sprintMultiplier, sensitivity, maxForce, jumpForce;
-    private bool grounded, sprint;
+    public float speed, sprintMultiplier, crouchMultiplier, crouchCameraHeightReduction, sensitivity, maxForce, jumpForce;
+    private bool grounded, sprint, crouch;
     private Vector2 move, look;
-    private float lookRotation, rbRotation;
+    private float lookRotation, rbRotation, cameraDefaultHeight;
 
     /*
         TODO
@@ -24,6 +24,7 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
+        cameraDefaultHeight = camHolder.transform.localPosition.y;
     }
 
     void FixedUpdate() {
@@ -47,14 +48,10 @@ public class PlayerController : MonoBehaviour
         lookRotation += -look.y * sensitivity;
         lookRotation = Mathf.Clamp(lookRotation, -90, 90);
         camHolder.transform.eulerAngles = new Vector3(lookRotation, rbRotation, camHolder.transform.eulerAngles.z);
+
+        if (crouch && camHolder.transform.localPosition.y == cameraDefaultHeight) camHolder.transform.localPosition = new Vector3(0, cameraDefaultHeight - crouchCameraHeightReduction, 0);
+        if (!crouch && camHolder.transform.localPosition.y != cameraDefaultHeight) camHolder.transform.localPosition = new Vector3(0, cameraDefaultHeight, 0);
     }
-
-    // void CameraLook() {
-    //     if (Cursor.lockState == CursorLockMode.None) return;
-
-    //     lookRotation += new Vector2(look.x * sensitivity, Mathf.Clamp(-look.y * sensitivity, -90, 90));
-    //     camHolder.transform.eulerAngles = new Vector3(lookRotation.x, lookRotation.y, camHolder.transform.eulerAngles.z);
-    // }
 
     void CheckLockCursor() {
         if (Input.GetKeyDown(KeyCode.Tab)) Cursor.lockState = CursorLockMode.None;
@@ -65,7 +62,15 @@ public class PlayerController : MonoBehaviour
         if (!grounded) return;
 
         Vector3 targetVelocity = new Vector3(move.x, 0, move.y);
-        targetVelocity *= sprint && move.y > 0 ? speed * sprintMultiplier : speed;
+
+        if (crouch) {
+            targetVelocity *= speed * crouchMultiplier;
+        } else if (sprint && move.y > 0) { 
+            targetVelocity *= speed * sprintMultiplier; 
+        } else {
+            targetVelocity *= speed;
+        }
+
         targetVelocity = transform.TransformDirection(targetVelocity);
         Vector3 velocityChange = targetVelocity - rb.velocity;
         velocityChange = new Vector3(velocityChange.x, 0, velocityChange.z);
@@ -97,8 +102,12 @@ public class PlayerController : MonoBehaviour
         sprint = context.performed ? true : false;
     }
 
-    // public hooks
+    public void SetCrouch(InputAction.CallbackContext context) {
+        crouch = context.performed ? true : false;
+    }
 
+    // public hooks
+    
     public void SetGrounded(bool state) {
         grounded = state;
     }
@@ -106,5 +115,4 @@ public class PlayerController : MonoBehaviour
     public void SetSensitivity(float sens) {
         sensitivity = sens;
     }
-
 }
