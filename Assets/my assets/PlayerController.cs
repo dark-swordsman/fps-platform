@@ -31,9 +31,6 @@ public class PlayerController : MonoBehaviour
         MovePlayer();
     }
 
-    void Update() {
-    }
-
     void LateUpdate()
     {
         CameraLook();
