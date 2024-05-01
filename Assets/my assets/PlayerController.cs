@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour
 {
     public Rigidbody rb;
     public GameObject camHolder;
+    public MenuController menuController;
     public float speed, sprintMultiplier, crouchMultiplier, crouchCameraHeightReduction, sensitivity, maxForce, jumpForce;
     private bool grounded, sprint, crouch;
     private Vector2 move, look;
@@ -16,6 +17,7 @@ public class PlayerController : MonoBehaviour
 
     /*
         TODO
+        - camera jitter when rotating + moving
         - fix vault yeet over ledges after jumping / add vaulting mechanic
     */
 
@@ -23,26 +25,24 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
-        Cursor.lockState = CursorLockMode.Locked;
+        // Cursor.lockState = CursorLockMode.Locked;
         cameraDefaultHeight = camHolder.transform.localPosition.y;
     }
 
     void FixedUpdate() {
-        MovePlayer();
+        MovePlayer(menuController.GetMenuState());
     }
 
     void LateUpdate()
     {
-        CameraLook();
-        CheckLockCursor();
+        if (!menuController.GetMenuState()) CameraLook();
+        // CheckLockCursor();
     }
 
     // custom functions
 
     void CameraLook() {
-        if (Cursor.lockState == CursorLockMode.None) return;
-
-        // transform.Rotate(Vector3.up * look.x * sensitivity);
+        transform.Rotate(Vector3.up * look.x * sensitivity);
         rbRotation += look.x * sensitivity;
         rb.MoveRotation(Quaternion.Euler(Vector3.up * rbRotation));
         lookRotation += -look.y * sensitivity;
@@ -58,10 +58,10 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyUp(KeyCode.Tab)) Cursor.lockState = CursorLockMode.Locked;
     }
 
-    void MovePlayer() {
+    void MovePlayer(bool disableMovement) {
         if (!grounded) return;
 
-        Vector3 targetVelocity = new Vector3(move.x, 0, move.y);
+        Vector3 targetVelocity = disableMovement ? Vector3.zero : new Vector3(move.x, 0, move.y);
 
         if (crouch) {
             targetVelocity *= speed * crouchMultiplier;
@@ -95,7 +95,7 @@ public class PlayerController : MonoBehaviour
     }
 
     public void OnJump(InputAction.CallbackContext context) {
-        Jump();
+        if (!menuController.GetMenuState()) Jump();
     }
 
     public void SetSprint(InputAction.CallbackContext context) {
