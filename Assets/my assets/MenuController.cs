@@ -25,8 +25,8 @@ public class MenuController : MonoBehaviour
             MenuUI.SetActive(true);
             Cursor.lockState = CursorLockMode.None;
         } else {
-            Cursor.lockState = CursorLockMode.Locked;
             MenuUI.SetActive(false);
+            Cursor.lockState = CursorLockMode.Locked;
         }
     }
 

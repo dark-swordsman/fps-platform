@@ -26,7 +26,6 @@ public class PlayerController : MonoBehaviour
     {
         // Cursor.lockState = CursorLockMode.Locked;
         cameraDefaultHeight = camHolder.transform.localPosition.y;
-        SetSensitivity(1.0f);
     }
 
     void FixedUpdate() {
