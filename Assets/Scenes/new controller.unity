@@ -2798,6 +2798,22 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: e32ce9b3-081e-4f9f-817d-3f57b6f90b61
     m_ActionName: Player/Sprint[/Keyboard/shift]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1893876922}
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+        m_MethodName: SetCrouch
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 395cd7f7-2a7b-468e-8b30-fc09dd9dd0ee
+    m_ActionName: Player/Crouch[/Keyboard/ctrl]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -2819,6 +2835,8 @@ MonoBehaviour:
   camHolder: {fileID: 1657315545}
   speed: 4
   sprintMultiplier: 1.4
+  crouchMultiplier: 0.5
+  crouchCameraHeightReduction: 0.4
   sensitivity: 0.1
   maxForce: 1
   jumpForce: 1.75
