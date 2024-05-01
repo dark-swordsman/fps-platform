@@ -16,8 +16,7 @@ public class PlayerController : MonoBehaviour
 
     /*
         TODO
-        - fix vault yeet over ledges after jumping
-        - add vaulting mechanic
+        - fix vault yeet over ledges after jumping / add vaulting mechanic
     */
 
     // unity functions
