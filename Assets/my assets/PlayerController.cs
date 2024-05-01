@@ -17,6 +17,7 @@ public class PlayerController : MonoBehaviour
 
     /*
         TODO
+        - camera jitter when rotating + moving
         - fix vault yeet over ledges after jumping / add vaulting mechanic
     */
 
