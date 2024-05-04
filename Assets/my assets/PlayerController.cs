@@ -87,6 +87,7 @@ public class PlayerController : MonoBehaviour
     // input hooks
 
     public void OnMove(InputAction.CallbackContext context) {
+        Debug.Log("moving");
         move = context.ReadValue<Vector2>();
     }
 
